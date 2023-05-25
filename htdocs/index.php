@@ -84,7 +84,7 @@ if (!empty($conf->global->MAIN_APPLICATION_TITLE)) {
 	$title = $langs->trans("HomeArea").' - '.$conf->global->MAIN_APPLICATION_TITLE;
 }
 
-llxHeader('', $title);
+// llxHeader('', $title);
 
 
 $resultboxes = FormOther::getBoxesArea($user, "0"); // Load $resultboxes (selectboxlist + boxactivated + boxlista + boxlistb)
