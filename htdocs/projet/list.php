@@ -604,17 +604,10 @@ if ($search_import_key) {
 }
 // Search for tag/category ($searchCategoryProjectList is an array of ID)
 
-$searchParentChildProjectSqlList = array();
-print 'console.log("parent_projects value:' .$search_parent_child_projects. '")';
+error_log("parent_projects value: $search_parent_child_projects ");
 if($search_parent_child_projects == 1) {
-	$existsParentChildProjectList = array();
-	$sqlParentChildProjectsNotExists = "NOT EXISTS (SELECT p.fk_project FROM ".MAIN_DB_PREFIX."d_projet as dp WHERE dp.fk_project != NULL";
-	$searchParentChildProjectSqlList[] = $sqlParentChildProjectsNotExists;
+	$sql .= " AND p.fk_project IS NULL";
 }
-if (!empty($searchParentChildProjectSqlList)) {
-	//$sql .= " AND (".implode(' AND ', $searchParentChildProjectSqlList).")";
-	$sql = "";
-} 
 
 $searchCategoryCustomerSqlList = array();
 if ($searchCategoryCustomerOperator == 1) {
@@ -1003,7 +996,7 @@ if (!empty($conf->global->MAIN_SEARCH_CATEGORY_CUSTOMER_ON_PROJECT_LIST) && isMo
 	$moreforfilter .= '</div>';
 }
 
-$moreforfilter .= '<input type="checkbox" class="valignmiddle" id="search_parent_child_projects" name="search_parent_child_projects" checked="checked" value="0"/>';
+$moreforfilter .= '<input type="checkbox" class="valignmiddle" id="search_parent_child_projects" name="search_parent_child_projects" checked="checked" value="'.$search_parent_child_projects.'"/>';
 
 if (!empty($moreforfilter)) {
 	print '<div class="liste_titre liste_titre_bydiv centpercent">';
