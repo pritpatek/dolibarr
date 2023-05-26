@@ -1238,7 +1238,7 @@ class Project extends CommonObject
 
 		$statustrans = array(
 			0 => 'status0',
-			1 => 'status4',
+			1 => 'statusText',
 			2 => 'status6',
 		);
 

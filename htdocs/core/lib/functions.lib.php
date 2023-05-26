@@ -10933,7 +10933,8 @@ function dolGetStatus($statusLabel = '', $statusLabelShort = '', $html = '', $st
 			'status6' => 'statut6',
 			'status7' => 'statut7',
 			'status8' => 'statut8',
-			'status9' => 'statut9'
+			'status9' => 'statut9',
+			'statusText' => ''
 		);
 
 		if (!empty($statusImg[$statusType])) {

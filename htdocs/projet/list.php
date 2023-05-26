@@ -124,8 +124,6 @@ if (GETPOSTISSET('formfilteraction')) {
 	$searchCategoryCustomerOperator = $conf->global->MAIN_SEARCH_CAT_OR_BY_DEFAULT;
 }
 $searchCategoryCustomerList = GETPOST('search_category_customer_list', 'array');
-$search_parent_child_projects = GETPOST('search_parent_child_projects', 'int');
-
 
 $mine = ((GETPOST('mode') == 'mine') ? 1 : 0);
 if ($mine) {
@@ -604,18 +602,6 @@ if ($search_import_key) {
 }
 // Search for tag/category ($searchCategoryProjectList is an array of ID)
 
-$searchParentChildProjectSqlList = array();
-print 'console.log("parent_projects value:' .$search_parent_child_projects. '")';
-if($search_parent_child_projects == 1) {
-	$existsParentChildProjectList = array();
-	$sqlParentChildProjectsNotExists = "NOT EXISTS (SELECT p.fk_project FROM ".MAIN_DB_PREFIX."d_projet as dp WHERE dp.fk_project != NULL";
-	$searchParentChildProjectSqlList[] = $sqlParentChildProjectsNotExists;
-}
-if (!empty($searchParentChildProjectSqlList)) {
-	//$sql .= " AND (".implode(' AND ', $searchParentChildProjectSqlList).")";
-	$sql = "";
-} 
-
 $searchCategoryCustomerSqlList = array();
 if ($searchCategoryCustomerOperator == 1) {
 	$existsCategoryCustomerList = array();
@@ -1002,8 +988,6 @@ if (!empty($conf->global->MAIN_SEARCH_CATEGORY_CUSTOMER_ON_PROJECT_LIST) && isMo
 	$moreforfilter .= $form->textwithpicto('', $langs->trans('UseOrOperatorForCategories') . ' : ' . $tmptitle, 1, 'help', '', 0, 2, 'tooltip_cat_cus'); // Tooltip on click
 	$moreforfilter .= '</div>';
 }
-
-$moreforfilter .= '<input type="checkbox" class="valignmiddle" id="search_parent_child_projects" name="search_parent_child_projects" checked="checked" value="0"/>';
 
 if (!empty($moreforfilter)) {
 	print '<div class="liste_titre liste_titre_bydiv centpercent">';

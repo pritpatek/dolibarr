@@ -182,7 +182,7 @@ class box_scheduled_jobs extends ModeleBoxes
 					$textnoformat .= '<a class="inline-block paddingleft paddingright marginleftonly marginrightonly minwidth25 nounderlineimp" href="'.DOL_URL_ROOT.'/cron/list.php?search_lastresult='.urlencode('<>0').'" title="'.$langs->trans("NumberScheduledJobError").'"><div class="badge badge-danger nounderlineimp"><i class="fa fa-exclamation-triangle"></i> '.$nbjobsinerror.'</div></a>';
 				}
 				if (empty($nbjobsnotfinished) && empty($nbjobsinerror)) {
-					$textnoformat .= '<a class="inline-block paddingleft paddingright marginleftonly marginrightonly minwidth25 nounderlineimp" href="'.DOL_URL_ROOT.'/cron/list.php"><div class="center badge badge-status4 nounderline">0</div></a>';
+					$textnoformat .= '<a class="inline-block paddingleft paddingright marginleftonly marginrightonly minwidth25 nounderlineimp" href="'.DOL_URL_ROOT.'/cron/list.php"><div class="center badge nounderline">0</div></a>';
 				}
 				$this->info_box_contents[$line][] = array(
 					'td' => 'class="center"',
