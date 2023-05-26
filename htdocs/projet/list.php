@@ -124,6 +124,7 @@ if (GETPOSTISSET('formfilteraction')) {
 	$searchCategoryCustomerOperator = $conf->global->MAIN_SEARCH_CAT_OR_BY_DEFAULT;
 }
 $searchCategoryCustomerList = GETPOST('search_category_customer_list', 'array');
+$search_parent_child_projects = GETPOST('search_parent_child_projects', 'int');
 
 
 $mine = ((GETPOST('mode') == 'mine') ? 1 : 0);
@@ -602,35 +603,19 @@ if ($search_import_key) {
 	$sql .= natural_search(array('p.import_key'), $search_import_key);
 }
 // Search for tag/category ($searchCategoryProjectList is an array of ID)
-$searchCategoryProjectList = $search_category_array;
-$searchCategoryProjectOperator = 0;
-if (!empty($searchCategoryProjectList)) {
-	$searchCategoryProjectSqlList = array();
-	$listofcategoryid = '';
-	foreach ($searchCategoryProjectList as $searchCategoryProject) {
-		if (intval($searchCategoryProject) == -2) {
-			$searchCategoryProjectSqlList[] = "NOT EXISTS (SELECT ck.fk_project FROM ".MAIN_DB_PREFIX."categorie_project as ck WHERE p.rowid = ck.fk_project)";
-		} elseif (intval($searchCategoryProject) > 0) {
-			if ($searchCategoryProjectOperator == 0) {
-				$searchCategoryProjectSqlList[] = " EXISTS (SELECT ck.fk_project FROM ".MAIN_DB_PREFIX."categorie_project as ck WHERE p.rowid = ck.fk_project AND ck.fk_categorie = ".((int) $searchCategoryProject).")";
-			} else {
-				$listofcategoryid .= ($listofcategoryid ? ', ' : '') .((int) $searchCategoryProject);
-			}
-		}
-	}
-	if ($listofcategoryid) {
-		$searchCategoryProjectSqlList[] = " EXISTS (SELECT ck.fk_project FROM ".MAIN_DB_PREFIX."categorie_project as ck WHERE p.rowid = ck.fk_project AND ck.fk_categorie IN (".$db->sanitize($listofcategoryid)."))";
-	}
-	if ($searchCategoryProjectOperator == 1) {
-		if (!empty($searchCategoryProjectSqlList)) {
-			$sql .= " AND (".implode(' OR ', $searchCategoryProjectSqlList).")";
-		}
-	} else {
-		if (!empty($searchCategoryProjectSqlList)) {
-			$sql .= " AND (".implode(' AND ', $searchCategoryProjectSqlList).")";
-		}
-	}
+
+$searchParentChildProjectSqlList = array();
+print 'console.log("parent_projects value:' .$search_parent_child_projects. '")';
+if($search_parent_child_projects == 1) {
+	$existsParentChildProjectList = array();
+	$sqlParentChildProjectsNotExists = "NOT EXISTS (SELECT p.fk_project FROM ".MAIN_DB_PREFIX."d_projet as dp WHERE dp.fk_project != NULL";
+	$searchParentChildProjectSqlList[] = $sqlParentChildProjectsNotExists;
 }
+if (!empty($searchParentChildProjectSqlList)) {
+	//$sql .= " AND (".implode(' AND ', $searchParentChildProjectSqlList).")";
+	$sql = "";
+} 
+
 $searchCategoryCustomerSqlList = array();
 if ($searchCategoryCustomerOperator == 1) {
 	$existsCategoryCustomerList = array();
@@ -1017,6 +1002,8 @@ if (!empty($conf->global->MAIN_SEARCH_CATEGORY_CUSTOMER_ON_PROJECT_LIST) && isMo
 	$moreforfilter .= $form->textwithpicto('', $langs->trans('UseOrOperatorForCategories') . ' : ' . $tmptitle, 1, 'help', '', 0, 2, 'tooltip_cat_cus'); // Tooltip on click
 	$moreforfilter .= '</div>';
 }
+
+$moreforfilter .= '<input type="checkbox" class="valignmiddle" id="search_parent_child_projects" name="search_parent_child_projects" checked="checked" value="0"/>';
 
 if (!empty($moreforfilter)) {
 	print '<div class="liste_titre liste_titre_bydiv centpercent">';
