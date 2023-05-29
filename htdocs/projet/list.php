@@ -124,8 +124,7 @@ if (GETPOSTISSET('formfilteraction')) {
 	$searchCategoryCustomerOperator = $conf->global->MAIN_SEARCH_CAT_OR_BY_DEFAULT;
 }
 $searchCategoryCustomerList = GETPOST('search_category_customer_list', 'array');
-$search_parent_child_projects = GETPOST('search_parent_child_projects', 'int');
-
+$search_parent_child_projects = (GETPOST('search_parent_child_projects', 'alpha') == 'on' ? 1 : 0);
 
 $mine = ((GETPOST('mode') == 'mine') ? 1 : 0);
 if ($mine) {
@@ -604,7 +603,6 @@ if ($search_import_key) {
 }
 // Search for tag/category ($searchCategoryProjectList is an array of ID)
 
-error_log("parent_projects value: $search_parent_child_projects ");
 if($search_parent_child_projects == 1) {
 	$sql .= " AND p.fk_project IS NULL";
 }
@@ -996,7 +994,7 @@ if (!empty($conf->global->MAIN_SEARCH_CATEGORY_CUSTOMER_ON_PROJECT_LIST) && isMo
 	$moreforfilter .= '</div>';
 }
 
-$moreforfilter .= '<input type="checkbox" class="valignmiddle" id="search_parent_child_projects" name="search_parent_child_projects" checked="checked" value="'.$search_parent_child_projects.'"/>';
+$moreforfilter .= '<p style="display: inline-block; margin-left: 5px;">Show only parent projects  </p><input type="checkbox" style="margin-left: 10px" class="valignmiddle" id="search_parent_child_projects" name="search_parent_child_projects"'.(GETPOSTISSET('search_parent_child_projects') ? (GETPOST('search_parent_child_projects', 'alpha') == 'on' ? ' checked="checked"' : '') : '').'"> ';
 
 if (!empty($moreforfilter)) {
 	print '<div class="liste_titre liste_titre_bydiv centpercent">';
